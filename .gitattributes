@@ -8,11 +8,8 @@
 *.in      text
 *.tmpl    text linguist-language=Jinja2
 *.py      text
-*.ac      text
-*.am      text
 
 tests/doctest.h -diff linguist-vendored
-builds/autoconf/m4/ax_*.m4 -diff linguist-vendored
 src/lcf/third_party/*.h -diff linguist-vendored
 
 src/generated/** -diff

@@ -32,38 +32,6 @@ https://easyrpg.org/downloads/
 
 ## Building
 
-### Autotools Makefile method:
-
-Building requirements:
-
-- pkg-config
-- GNU make
-
-Step-by-step instructions:
-
-    tar xf liblcf-0.6.2.tar.xz # unpack the tarball
-    cd liblcf-0.6.2            # enter in the package directory
-    ./configure --prefix /usr  # find libraries, set options
-    make                       # compile the library
-    sudo make install          # install system-wide
-
-Additional building requirements when using the source tree (git):
-
-- autoconf >= 2.69
-- automake >= 1.11.4
-- libtool
-
-To generate the "configure" script, run before following the above section:
-
-    autoreconf -i
-
-Read more detailed instructions at:
-
-https://wiki.easyrpg.org/development/compiling/liblcf/autotools
-
-
-### CMake method:
-
 Building requirements:
 
 - pkg-config (Not on Windows)
@@ -81,8 +49,7 @@ Read more detailed instructions at:
 
 https://wiki.easyrpg.org/development/compiling/liblcf/cmake
 
-CMake is the only supported way to build liblcf for Windows. All dependencies
-must be installed with [vcpkg].
+On Windows all dependencies must be installed with [vcpkg].
 
 
 ## Tools

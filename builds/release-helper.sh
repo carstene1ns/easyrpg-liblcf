@@ -21,9 +21,6 @@ if [[ ! -z $version ]]; then
   echo "  CMakeLists.txt"
   sed -i "/liblcf VERSION/,1 s/[0-9]\.[0-9]\.[0-9]/$version/" CMakeLists.txt
 
-  echo "  configure.ac"
-  sed -i "/AC_INIT/,1 s/[0-9]\.[0-9]\.[0-9]/$version/" configure.ac
-
   echo "  README.md"
   sed -i "s/\(liblcf-\)[0-9]\.[0-9]\.[0-9]/\1$version/g" README.md
 

@@ -1,0 +1,138 @@
+#!/bin/bash
+# configure helper by carstene1ns 2021 - under MIT license
+
+set -e
+#set -x
+
+# colors
+if [ -t 1 ]; then
+  NC='\033[0m'
+  Red='\033[1;31m'
+  Green='\033[1;32m'
+  Yellow='\033[1;33m'
+  White='\033[1;37m'
+fi
+
+# helper functions
+warn() {
+  echo -e "[${Yellow}WARNING${NC}] $1"
+}
+
+err() {
+  echo -e "[${Red}ERROR${NC}] $1"
+}
+
+ok() {
+  echo -e "[${Green}${1-OK}${NC}]"
+}
+
+notok() {
+  echo -e "[${Red}${1-NOT OK}${NC}]"
+}
+
+info() {
+  echo -e "[${White}INFO${NC}] $1"
+}
+
+check() {
+  echo -n "Checking $1..."
+}
+
+check_avail() {
+  check "if $1 is available"
+}
+
+check_version() {
+  [ "$1" == "$2" ] && return 0
+
+  IFS=. read -r -a want <<< "$1"
+  IFS=. read -r -a have <<< "$2"
+
+  # major
+  [ "${have[0]}" -lt "${want[0]}" ] && return 1
+  [ "${have[0]}" -gt "${want[0]}" ] && return 0
+  if [ "${have[0]}" -eq "${want[0]}" ]; then
+    # minor
+    [ "${have[1]}" -lt "${want[1]}" ] && return 1
+    [ "${have[1]}" -gt "${want[1]}" ] && return 0
+    if [ "${have[1]}" -eq "${want[1]}" ]; then
+      # patch
+      [ -z "${have[2]}" ] && have[2]=0
+      [ -z "${want[2]}" ] && want[2]=0
+      [ "${have[2]}" -lt "${want[2]}" ] && return 1
+      [ "${have[2]}" -ge "${want[2]}" ] && return 0
+    fi
+  fi
+}
+
+# main
+our_opts=""
+
+echo -e "\n${White}The autotools building method has been removed. Use CMake.${NC}\n"
+
+check_avail "CMake"
+if hash cmake 2>/dev/null; then
+  ok
+  check "CMake version"
+  minver="3.10"
+  curver=$(cmake --version | head -n1 | tr -dc "0-9.")
+  if check_version "$minver" "$curver"; then
+    ok
+  else
+    notok
+    err "Version ${curver} is too old! Please install version ${minver} or newer!"
+  fi
+else
+  notok "NOT FOUND"
+  err "CMake was not found."
+fi
+
+check_avail "Ninja"
+if hash ninja 2>/dev/null; then
+  ok
+  our_opts=" -G Ninja"
+else
+  notok "NOT FOUND"
+  warn "You are lacking faster builds."
+fi
+
+# check opts
+check "arguments"
+if [ "$#" -eq  "0" ]; then
+  ok "NONE"
+else
+  unknown_opts=""
+  for arg in "$@"; do
+    case "$arg" in
+    --*able-icu)
+      our_opts="$our_opts -DLIBLCF_WITH_ICU=ON/OFF"
+      ;;
+    --*able-xml)
+      our_opts="$our_opts -DLIBLCF_WITH_XML=ON/OFF"
+      ;;
+    --*able-tools)
+      our_opts="$our_opts -DLIBLCF_ENABLE_TOOLS=ON/OFF"
+      ;;
+    --*able-update-mimedb)
+      our_opts="$our_opts -DLIBLCF_UPDATE_MIMEDB=ON/OFF"
+      ;;
+    *)
+      unknown_opts="$unknown_opts\t$arg\n"
+      ;;
+    esac
+  done
+
+  ok
+
+  if [ -n "$unknown_opts" ]; then
+    warn "Found the following options that you may have to look up for counterparts in CMake:"
+    echo -n -e "$unknown_opts"
+  fi
+fi
+
+info "Use the following as base for your CMake invocation:"
+echo "  $ mkdir build"
+echo "  $ cd build"
+echo -e "  $ cmake ..${our_opts}"
+echo "  $ cmake --build ."
+echo ""

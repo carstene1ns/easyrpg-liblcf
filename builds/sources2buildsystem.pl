@@ -1,14 +1,14 @@
 #!/bin/perl
 
 # sources2buildsystem.pl - maintainer utility script to keep the
-# source/header file list for our build systems organized and up-to-date.
+# source/header file list for our cmake build system organized and up-to-date.
 # by carstene1ns 2018-2021, released under the MIT license
 
 use strict;
 use warnings;
 use File::Find;
 
-print "Searching for source/header files and adding them to the buildsystems...\n";
+print "Searching for source/header files and adding them to the buildsystem...\n";
 
 # process source directory
 my @files;
@@ -26,28 +26,13 @@ my $regex = '(\.cpp|_flags\.h|_impl\.h|src\/[^\/]*\.h)$';
 my @sources = grep( /$regex/, @files);
 my @headers = grep(!/$regex/, @files);
 
-# cmake
-my $sources_formatted = format_files(0, @sources);
-my $headers_formatted = format_files(0, @headers);
+# update cmake file
+my $sources_formatted = format_files(@sources);
+my $headers_formatted = format_files(@headers);
 my $buildsystem_file = "CMakeLists.txt";
 my $data = slurp($buildsystem_file);
 $data =~ s/(?<=^set\(LCF_SOURCES\n).*?(?=\n\)$)/$sources_formatted/sm;
 $data =~ s/(?<=^set\(LCF_HEADERS\n).*?(?=\n\)$)/$headers_formatted/sm;
-burp($buildsystem_file, $data);
-
-# autotools (needs split)
-$sources_formatted = format_files(1, @sources);
-$headers_formatted = format_files(1, grep(!/\/(ldb|lmt|lmu|lsd|rpg|third_party)\//, @headers));
-$buildsystem_file = "Makefile.am";
-$data = slurp($buildsystem_file);
-$data =~ s/(?<=^liblcf_la_SOURCES = \\\n).*?\.cpp$/$sources_formatted/sm;
-$data =~ s/(?<=^lcfinclude_HEADERS = \\\n).*?\.h$/$headers_formatted/sm;
-foreach ("ldb", "lmt", "lmu", "lsd", "rpg", "third_party") {
-	my $g = $_;
-	my $h = format_files(1, grep(/\/$g\//, @headers));
-	$g =~ tr/_//d; # remove underscore
-	$data =~ s/(?<=^lcf${g}include_HEADERS = \\\n).*?\.h$/$h/sm;
-}
 burp($buildsystem_file, $data);
 
 print "done.\n";
@@ -62,12 +47,10 @@ sub wanted {
 }
 
 sub format_files {
-	my $needs_slash = shift;
 	my $formatted;
 	foreach my $f (@_) {
 		my $is_last = (\$f == \$_[-1]);
 		$formatted .= "\t$f";
-		$formatted .= " \\" if (! $is_last && $needs_slash);
 		$formatted .= "\n" if (! $is_last)
 	}
 	return $formatted;
