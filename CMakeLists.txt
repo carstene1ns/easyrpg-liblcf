@@ -31,11 +31,6 @@ set(CMAKE_DEBUG_POSTFIX "d" CACHE STRING "Override CMAKE_DEBUG_POSTFIX.")
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/builds/cmake/Modules)
 include(ConfigureWindows)
 
-# C++14 is required
-set(CMAKE_CXX_STANDARD 14)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS ON)
-
 # lcf library files
 set(LCF_SOURCES
 	src/dbarray.cpp
@@ -297,6 +292,8 @@ set(LCF_HEADERS
 )
 
 add_library(lcf ${LCF_SOURCES} ${LCF_HEADERS})
+# C++14 is required
+target_compile_features(lcf PUBLIC cxx_std_14)
 
 # IDE source grouping
 foreach(SG LDB LMT LMU LSD RPG THIRD_PARTY)
@@ -310,14 +307,15 @@ endforeach()
 # includes
 target_include_directories(
 	lcf PUBLIC
-	${CMAKE_CURRENT_BINARY_DIR}/src
-	${CMAKE_CURRENT_SOURCE_DIR}/src
-	${CMAKE_CURRENT_SOURCE_DIR}/src/generated
+	"$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/src>"
+	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>"
+	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/generated>"
+	"$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>"
 )
 
 # Optimize floating point math functions into intrinsics and don't check or set errno (i.e. sqrt(-1))
 if (NOT CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-	target_compile_options(lcf PUBLIC "-fno-math-errno")
+	target_compile_options(lcf PRIVATE "-fno-math-errno")
 endif()
 
 # endianess checking
@@ -374,29 +372,11 @@ set_property(TARGET lcf PROPERTY SOVERSION 0)
 # installation
 include(GNUInstallDirs)
 
-# pkg-config file generation
-set(LCF_LIBDIR ${CMAKE_INSTALL_LIBDIR})
-if(IS_ABSOLUTE ${LCF_LIBDIR})
-	file(RELATIVE_PATH LCF_LIBDIR ${CMAKE_INSTALL_PREFIX} ${LCF_LIBDIR})
-endif()
-set(LCF_INCLUDEDIR ${CMAKE_INSTALL_INCLUDEDIR})
-if(IS_ABSOLUTE ${LCF_INCLUDEDIR})
-	file(RELATIVE_PATH LCF_INCLUDEDIR ${CMAKE_INSTALL_PREFIX} ${LCF_INCLUDEDIR})
-endif()
-set(PACKAGE_TARNAME ${PROJECT_NAME})
-set(PACKAGE_VERSION ${PROJECT_VERSION})
-set(prefix "${CMAKE_INSTALL_PREFIX}")
-set(exec_prefix "\${prefix}")
-set(libdir "\${exec_prefix}/${LCF_LIBDIR}")
-set(includedir "\${prefix}/${LCF_INCLUDEDIR}")
-string(REPLACE ";" " " AX_PACKAGE_REQUIRES_PRIVATE "${LIBLCF_DEPS}")
-configure_file(builds/${PROJECT_NAME}.pc.in builds/${PROJECT_NAME}.pc @ONLY)
-
-# Cmake-config file generation
-configure_file(builds/${PROJECT_NAME}-config.cmake.in builds/${PROJECT_NAME}-config.cmake @ONLY)
+set_property(TARGET lcf PROPERTY EXPORT_NAME liblcf)
 
 install(
 	TARGETS lcf
+	EXPORT ${PROJECT_NAME}Targets
 	ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
 	LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
 	RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
@@ -410,15 +390,51 @@ foreach(S ldb lmt lmu lsd rpg third_party)
 endforeach()
 install(FILES ${LCF_INSTALL_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/lcf)
 
+# pkg-config file generation
+set(LCF_LIBDIR ${CMAKE_INSTALL_LIBDIR})
+if(IS_ABSOLUTE ${LCF_LIBDIR})
+	file(RELATIVE_PATH LCF_LIBDIR ${CMAKE_INSTALL_PREFIX} ${LCF_LIBDIR})
+endif()
+set(LCF_INCLUDEDIR ${CMAKE_INSTALL_INCLUDEDIR})
+if(IS_ABSOLUTE ${LCF_INCLUDEDIR})
+	file(RELATIVE_PATH LCF_INCLUDEDIR ${CMAKE_INSTALL_PREFIX} ${LCF_INCLUDEDIR})
+endif()
+set(PACKAGE_VERSION ${PROJECT_VERSION})
+set(prefix "${CMAKE_INSTALL_PREFIX}")
+set(exec_prefix "\${prefix}")
+set(libdir "\${exec_prefix}/${LCF_LIBDIR}")
+set(includedir "\${prefix}/${LCF_INCLUDEDIR}")
+string(REPLACE ";" " " AX_PACKAGE_REQUIRES_PRIVATE "${LIBLCF_DEPS}")
+configure_file(builds/${PROJECT_NAME}.pc.in builds/${PROJECT_NAME}.pc @ONLY)
+
 install(
 	FILES ${CMAKE_CURRENT_BINARY_DIR}/builds/${PROJECT_NAME}.pc
 	DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig
 )
 
+# Cmake-config file generation
+include(CMakePackageConfigHelpers)
+set(generated_dir "${CMAKE_CURRENT_BINARY_DIR}/cmake")
+set(version_file "${generated_dir}/${PROJECT_NAME}ConfigVersion.cmake")
+set(config_file "${generated_dir}/${PROJECT_NAME}Config.cmake")
+set(cmake_files_install_dir "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}")
+
+write_basic_package_version_file(${version_file}
+	VERSION ${PACKAGE_VERSION}
+	COMPATIBILITY AnyNewerVersion)
+
+configure_package_config_file("builds/Config.cmake.in" "${config_file}"
+	INSTALL_DESTINATION ${cmake_files_install_dir}
+	PATH_VARS LCF_INCLUDEDIR)
+
 install(
-	FILES
-	  ${CMAKE_CURRENT_BINARY_DIR}/builds/liblcf-config.cmake
-	DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/liblcf)
+	FILES ${version_file} ${config_file}
+	DESTINATION ${cmake_files_install_dir})
+
+install(
+	EXPORT ${PROJECT_NAME}Targets
+	NAMESPACE ${PROJECT_NAME}::
+	DESTINATION ${cmake_files_install_dir})
 
 # mime types
 install(
@@ -477,7 +493,6 @@ find_package(Doxygen)
 if(DOXYGEN_FOUND)
 	add_custom_target(liblcf_doc
 		${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/builds/Doxyfile
-		DEPENDS lcf
 		WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/builds
 		COMMENT "Generating API documentation with Doxygen" VERBATIM)
 else()

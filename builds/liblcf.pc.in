@@ -3,7 +3,7 @@ exec_prefix=@exec_prefix@
 libdir=@libdir@
 includedir=@includedir@
 
-Name: @PACKAGE_TARNAME@
+Name: liblcf
 Description: Library to handle RPG Maker 2000 and 2003 game data
 Version: @PACKAGE_VERSION@
 URL: https://easyrpg.org/
