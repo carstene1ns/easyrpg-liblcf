@@ -12,12 +12,15 @@
 
 #include <string>
 #include <vector>
+#include <map>
 #include "lcf/string_view.h"
 
 namespace lcf {
 namespace rpg {
 	class Database;
 }
+
+using ConvAliasMap = std::map<std::string, std::vector<std::string>>;
 
 /**
  * ReaderUtil namespace.
@@ -93,6 +96,10 @@ namespace ReaderUtil {
 	 * @return system encoding or western if no locale found.
 	 */
 	std::string GetLocaleEncoding();
+
+	ConvAliasMap GetSupportedEncodings();
+
+	bool IsEncodingSupported(StringView encoding);
 
 	/**
 	 * Converts a string to unicode.

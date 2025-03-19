@@ -46,22 +46,17 @@ enum FileTypes
 	FileType_Invalid
 };
 
+void ShowHelp(const char* argv0);
 std::string GetFilename(const std::string& str);
 FileCategories GetFilecategory(const std::string& in_file);
 FileTypes GetFiletype(const std::string& in_file, std::string& out_extension);
 void PrintReaderError(const std::string data);
 int ReaderWriteToFile(const std::string& in, const std::string& out, FileTypes in_type, lcf::EngineVersion engine, std::string encoding);
+void ShowSupportedEncodings();
 
-int main(int argc, char** argv)
-{
-	if (argc <= 1)
-	{
-		std::cerr << "LCF2XML - Converts RPG Maker 2000/2003 Files into XML and vice versa" << std::endl;
-		std::cerr << "Usage: " << argv[0] << "[--2k] [--2k3] file1 [... fileN]" << std::endl;
-		std::cerr << "\t--2k: Treat files as RPG 2000" << std::endl;
-		std::cerr << "\t--2k3: Treat files as RPG 2003 (default)" << std::endl;
-		std::cerr << "\t--encoding N: Use encoding N as the file encoding" << std::endl;
-
+int main(int argc, char** argv) {
+	if (argc == 1) {
+		ShowHelp(argv[0]);
 		return 1;
 	}
 
@@ -76,6 +71,14 @@ int main(int argc, char** argv)
 
 	lcf::EngineVersion engine = lcf::EngineVersion::e2k3;
 	for (int i = 1; i < argc; ++i) {
+		if (!std::strcmp(argv[1], "--help")) {
+			ShowHelp(argv[0]);
+			return 1;
+		}
+		if (!std::strcmp(argv[1], "--supported-encodings")) {
+			ShowSupportedEncodings();
+			return 1;
+		}
 		if (!std::strcmp(argv[i], "--2k")) {
 			engine = lcf::EngineVersion::e2k;
 			continue;
@@ -85,6 +88,11 @@ int main(int argc, char** argv)
 			continue;
 		}
 		if (!std::strcmp(argv[i], "--encoding") && (++i < argc)) {
+			if(!lcf::ReaderUtil::IsEncodingSupported(argv[i])) {
+				std::cerr << "Invalid encoding " << argv[i] << "." << std::endl;
+				return 1;
+			}
+
 			encoding = argv[i];
 			continue;
 		}
@@ -116,6 +124,16 @@ int main(int argc, char** argv)
 	}
 
 	return 0;
+}
+
+void ShowHelp(const char* argv0) {
+	std::cerr << "LCF2XML - Converts RPG Maker 2000/2003 Files into XML and vice versa" << std::endl;
+	std::cerr << "Usage: " << argv0 << " [--2k] [--2k3] file1 [... fileN]" << std::endl;
+	std::cerr << "\t--help: Show this help message" << std::endl;
+	std::cerr << "\t--2k: Treat files as RPG 2000" << std::endl;
+	std::cerr << "\t--2k3: Treat files as RPG 2003 (default)" << std::endl;
+	std::cerr << "\t--encoding N: Use encoding N as the file encoding" << std::endl;
+	std::cerr << "\t--supported-encodings: Show supported file encodings" << std::endl;
 }
 
 /** Returns the filename (without extension). */
@@ -347,4 +365,21 @@ int ReaderWriteToFile(const std::string& in, const std::string& out, FileTypes i
 	}
 
 	return 0;
+}
+
+void ShowSupportedEncodings() {
+	auto map = lcf::ReaderUtil::GetSupportedEncodings();
+
+	std::cerr << "Supported encodings in this build:" << std::endl;
+	for(const auto &enc : map) {
+		std::cerr << "- " << enc.first << ", with aliases: "<< std::endl;
+		if(!enc.second.empty()) {
+			//std::cerr << "  (Aliases: ";
+			for(const auto &alias : enc.second) {
+				//std::cerr << alias << ", ";
+				std::cerr << "  - " << alias << std::endl;
+			}
+			//std::cerr << ")" << std::endl;
+		}
+	}
 }

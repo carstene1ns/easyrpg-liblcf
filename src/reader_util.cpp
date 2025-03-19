@@ -304,6 +304,85 @@ std::string ReaderUtil::GetLocaleEncoding() {
 	return CodepageToEncoding(codepage);
 }
 
+ConvAliasMap ReaderUtil::GetSupportedEncodings() {
+	ConvAliasMap encodings;
+
+#if LCF_SUPPORT_ICU
+	UErrorCode status = U_ZERO_ERROR;
+
+#if 1
+	UCharsetDetector* detector = ucsdet_open(&status);
+	if(U_FAILURE(status))
+		return encodings;
+
+	configureDetector(detector);
+
+	auto detect_sg = makeScopeGuard([&]() { ucsdet_close(detector); });
+
+	UEnumeration* detectable_encodings = ucsdet_getDetectableCharsets(detector, &status);
+	if(U_SUCCESS(status)) {
+		auto enum_sg = makeScopeGuard([&]() { uenum_close(detectable_encodings); });
+
+		int detectable_count = uenum_count(detectable_encodings, &status);
+		for (int i = 0; i < detectable_count; i++) {
+			int name_length;
+			const char* name = uenum_next(detectable_encodings, &name_length, &status);
+
+			// ignore
+			if(U_FAILURE(status))
+				continue;
+
+			int count2 = ucnv_countAliases(name, &status);
+			std::vector<std::string> aliases;
+
+			for (int j = 0; j < count2; j++) {
+				const char *alias = ucnv_getAlias(name, j, &status);
+				if(/*status != U_AMBIGUOUS_ALIAS_WARNING &&*/ strcmp(alias, name) != 0)
+					aliases.push_back(alias);
+			}
+			encodings.emplace(name, aliases);
+		}
+	}
+#else // 0
+
+int count1 = ucnv_countAvailable();
+for (int i = 0; i < count1; i++) {
+	const char *name = ucnv_getAvailableName(i);
+
+	int count2 = ucnv_countAliases(name, &status);
+	std::vector<std::string> aliases;
+
+	for (int j = 0; j < count2; j++) {
+		const char *alias = ucnv_getAlias(name, j, &status);
+		if(strlen(alias) > 0 /*&& status != U_AMBIGUOUS_ALIAS_WARNING*/ && strcmp(alias, name) != 0)
+			aliases.push_back(alias);
+	}
+	encodings.emplace(name, aliases);
+}
+#endif // 0
+
+#else
+	encodings.emplace(kDefaultEncoding, {});
+#endif
+	return encodings;
+}
+
+bool ReaderUtil::IsEncodingSupported(StringView encoding) {
+	auto enc = std::string(encoding);
+	auto code_page = atoi(enc.c_str());
+	if(code_page > 0)
+		enc = CodepageToEncoding(code_page);
+
+#if LCF_SUPPORT_ICU
+	auto status = U_ZERO_ERROR;
+	auto conv = ucnv_open(enc.c_str(), &status);
+	ucnv_close(conv);
+	return U_SUCCESS(status);
+#else
+	return (enc == kDefaultEncoding);
+#endif
+}
+
 std::string ReaderUtil::Recode(StringView str_to_encode, StringView source_encoding) {
 	lcf::Encoder enc(ToString(source_encoding));
 	std::string out = ToString(str_to_encode);
