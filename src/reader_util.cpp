@@ -42,21 +42,29 @@
 
 namespace lcf {
 
+static void configureDetector(UCharsetDetector* ucsd) {
+	UErrorCode status = U_ZERO_ERROR;
+
+	// Disable some default encodings, since they are not used
+	for(const char* enc : {"UTF-16BE", "UTF-16LE", "UTF-32BE", "UTF-32LE"}) {
+		ucsdet_setDetectableCharset(ucsd, enc, false, &status);
+	}
+}
+
 namespace ReaderUtil {
 }
 
 std::string ReaderUtil::CodepageToEncoding(int codepage) {
-	if (codepage == 0)
+	switch(codepage) {
+	case 0:
 		return {};
-
-	if (codepage == 932) {
+	case 932:
 		return "ibm-943_P15A-2003";
-	}
-	if (codepage == 949) {
+	case 949:
 		return "windows-949-2000";
+	default:
+		return "windows-" + std::to_string(codepage);
 	}
-
-	return "windows-" + std::to_string(codepage);
 }
 
 std::string ReaderUtil::DetectEncoding(lcf::rpg::Database& db) {
@@ -120,7 +128,7 @@ std::vector<std::string> ReaderUtil::DetectEncodings(lcf::rpg::Database& db) {
 
 	return ReaderUtil::DetectEncodings(text.str());
 #else
-	return {"windows-1252"};
+	return {kDefaultEncoding};
 #endif
 }
 
@@ -140,6 +148,8 @@ std::vector<std::string> ReaderUtil::DetectEncodings(StringView string) {
 	if (!string.empty()) {
 		UErrorCode status = U_ZERO_ERROR;
 		UCharsetDetector* detector = ucsdet_open(&status);
+
+		configureDetector(detector);
 
 		auto s = std::string(string);
 
@@ -178,7 +188,7 @@ std::vector<std::string> ReaderUtil::DetectEncodings(StringView string) {
 					encodings.emplace_back("windows-949-2000"); // Korean with \ as backlash
 				} else if (encoding == "GB18030") {
 					encodings.emplace_back("windows-936-2000"); // Simplified Chinese
-				} else if (encoding == "ISO-8859-1" || encoding == "windows-1252") {
+				} else if (encoding == "ISO-8859-1" || encoding == kDefaultEncoding) {
 					encodings.emplace_back("ibm-5348_P100-1997"); // Occidental with Euro
 				} else if (encoding == "ISO-8859-2" || encoding == "windows-1250") {
 					encodings.emplace_back("ibm-5346_P100-1998"); // Central Europe with Euro
@@ -190,8 +200,9 @@ std::vector<std::string> ReaderUtil::DetectEncodings(StringView string) {
 					encodings.emplace_back("ibm-5349_P100-1998"); // Greek with Euro
 				} else if (encoding == "ISO-8859-8" || encoding == "windows-1255") {
 					encodings.emplace_back("ibm-9447_P100-2002"); // Hebrew with Euro
-				} else if (encoding == "UTF-16BE" || encoding == "UTF-16LE") {
+				} else if (encoding.substr(0, 3) == "UTF") {
 					// ignore encodings that are obviously wrong
+					Log::Error("Ignoring UTF(-8, -16, -32) encodings");
 				} else {
 					encodings.push_back(encoding);
 				}
@@ -200,7 +211,7 @@ std::vector<std::string> ReaderUtil::DetectEncodings(StringView string) {
 		ucsdet_close(detector);
 	}
 #else
-	encodings.push_back("windows-1252");
+	encodings.push_back(kDefaultEncoding);
 #endif
 
 	return encodings;
@@ -242,9 +253,9 @@ std::string ReaderUtil::GetLocaleEncoding() {
 #elif __ANDROID__
 	// No std::locale support in NDK
 	// Doesn't really matter because the Android version auto-detects via ICU
-	int codepage = 1252;
+	int codepage = kDefaultCodepage;
 #else
-	int codepage = 1252;
+	int codepage = kDefaultCodepage;
 
 	std::locale loc = std::locale("");
 	// Gets the language and culture part only
@@ -279,7 +290,7 @@ std::string ReaderUtil::GetLocaleEncoding() {
 	         loc_lang == "nb" ||
 	         loc_lang == "pt" ||
 	         loc_lang == "sv" ||
-	         loc_lang == "eu")    codepage = 1252;
+	         loc_lang == "eu")    codepage = kDefaultCodepage;
 	else if (loc_lang == "el")    codepage = 1253;
 	else if (loc_lang == "tr")    codepage = 1254;
 	else if (loc_lang == "he")    codepage = 1255;

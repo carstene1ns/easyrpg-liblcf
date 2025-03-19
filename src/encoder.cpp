@@ -34,6 +34,8 @@
 
 namespace lcf {
 
+	inline constexpr int kUTF8Codepage = 65001;
+
 static std::string filterUtf8Compatible(std::string enc) {
 #if LCF_SUPPORT_ICU
 	if (ucnv_compareNames(enc.c_str(), "UTF-8") == 0) {
@@ -41,7 +43,7 @@ static std::string filterUtf8Compatible(std::string enc) {
 	}
 #endif
 
-	if (enc == "utf-8" || enc == "UTF-8" || enc == "65001") {
+	if (enc == "utf-8" || enc == "UTF-8" || enc == std::to_string(kUTF8Codepage)) {
 		return "";
 	}
 
@@ -110,12 +112,12 @@ void Encoder::Init() {
 	_conv_runtime = conv_runtime;
 	_conv_storage = conv_storage;
 #else
-	if (storage_encoding != "windows-1252") {
+	if (storage_encoding != kDefaultEncoding) {
 		return;
 	}
 
-	_conv_runtime = 65001;
-	_conv_storage = 1252;
+	_conv_runtime = kUTF8Codepage;
+	_conv_storage = kDefaultCodepage;
 #endif
 }
 
@@ -163,7 +165,7 @@ void Encoder::Convert(std::string& str, int conv_dst, int) {
 
 	size_t buf_idx = 0;
 
-	if (conv_dst == 65001) {
+	if (conv_dst == kUTF8Codepage) {
 		// From 1252 to UTF-8
 		// Based on https://stackoverflow.com/q/4059775/
 		_buffer.resize(str.size() * 2 + 1);

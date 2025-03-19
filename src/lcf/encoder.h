@@ -20,6 +20,9 @@ class UConverter;
 
 namespace lcf {
 
+inline constexpr const char* kDefaultEncoding = "windows-1252";
+inline constexpr int kDefaultCodepage = 1252;
+
 class Encoder {
 	public:
 		explicit Encoder(std::string encoding);
@@ -45,7 +48,9 @@ class Encoder {
 
 		bool IsOk() const;
 
-		const std::string& GetEncoding() const;
+		inline const std::string& GetEncoding() const {
+			return _encoding;
+		}
 	private:
 #if LCF_SUPPORT_ICU
 		void Init();
@@ -65,11 +70,6 @@ class Encoder {
 		std::vector<char> _buffer;
 		std::string _encoding;
 };
-
-
-inline const std::string& Encoder::GetEncoding() const {
-	return _encoding;
-}
 
 } //namespace lcf
 
