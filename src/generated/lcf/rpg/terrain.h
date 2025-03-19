@@ -35,7 +35,7 @@ namespace rpg {
 			BushDepth_half = 2,
 			BushDepth_full = 3
 		};
-		static constexpr auto kBushDepthTags = lcf::makeEnumTags<BushDepth>(
+		static inline constexpr auto kBushDepthTags = lcf::makeEnumTags<BushDepth>(
 			"normal",
 			"third",
 			"half",
@@ -45,7 +45,7 @@ namespace rpg {
 			BGAssociation_background = 0,
 			BGAssociation_frame = 1
 		};
-		static constexpr auto kBGAssociationTags = lcf::makeEnumTags<BGAssociation>(
+		static inline constexpr auto kBGAssociationTags = lcf::makeEnumTags<BGAssociation>(
 			"background",
 			"frame"
 		);

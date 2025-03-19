@@ -32,7 +32,7 @@ namespace rpg {
 	class Skill {
 	public:
 		// Sentinel name used to denote that the default skill start message should be used.
-		static constexpr const char* kDefaultMessage = "default_message";
+		static inline constexpr const char* kDefaultMessage = "default_message";
 
 		enum Type {
 			Type_normal = 0,
@@ -41,7 +41,7 @@ namespace rpg {
 			Type_switch = 3,
 			Type_subskill = 4
 		};
-		static constexpr auto kTypeTags = lcf::makeEnumTags<Type>(
+		static inline constexpr auto kTypeTags = lcf::makeEnumTags<Type>(
 			"normal",
 			"teleport",
 			"escape",
@@ -52,7 +52,7 @@ namespace rpg {
 			SpType_cost = 0,
 			SpType_percent = 1
 		};
-		static constexpr auto kSpTypeTags = lcf::makeEnumTags<SpType>(
+		static inline constexpr auto kSpTypeTags = lcf::makeEnumTags<SpType>(
 			"cost",
 			"percent"
 		);
@@ -63,7 +63,7 @@ namespace rpg {
 			Scope_ally = 3,
 			Scope_party = 4
 		};
-		static constexpr auto kScopeTags = lcf::makeEnumTags<Scope>(
+		static inline constexpr auto kScopeTags = lcf::makeEnumTags<Scope>(
 			"enemy",
 			"enemies",
 			"self",
@@ -74,7 +74,7 @@ namespace rpg {
 			HpType_cost = 0,
 			HpType_percent = 1
 		};
-		static constexpr auto kHpTypeTags = lcf::makeEnumTags<HpType>(
+		static inline constexpr auto kHpTypeTags = lcf::makeEnumTags<HpType>(
 			"cost",
 			"percent"
 		);

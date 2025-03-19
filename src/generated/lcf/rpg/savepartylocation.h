@@ -28,11 +28,11 @@ namespace rpg {
 	class SavePartyLocation : public SaveMapEventBase {
 	public:
 		// Equal to 9 tiles in 1/16th pixels
-		static constexpr int kPanXDefault = 9 * 256;
+		static inline constexpr int kPanXDefault = 9 * 256;
 		// Equal to 7 tiles in 1/16th pixels
-		static constexpr int kPanYDefault = 7 * 256;
+		static inline constexpr int kPanYDefault = 7 * 256;
 		// Frame speed in 1/16th pixels
-		static constexpr int kPanSpeedDefault = 2 << 3;
+		static inline constexpr int kPanSpeedDefault = 2 << 3;
 
 		enum VehicleType {
 			VehicleType_none = 0,
@@ -40,7 +40,7 @@ namespace rpg {
 			VehicleType_ship = 2,
 			VehicleType_airship = 3
 		};
-		static constexpr auto kVehicleTypeTags = lcf::makeEnumTags<VehicleType>(
+		static inline constexpr auto kVehicleTypeTags = lcf::makeEnumTags<VehicleType>(
 			"none",
 			"skiff",
 			"ship",
@@ -50,7 +50,7 @@ namespace rpg {
 			PanState_fixed = 0,
 			PanState_follow = 1
 		};
-		static constexpr auto kPanStateTags = lcf::makeEnumTags<PanState>(
+		static inline constexpr auto kPanStateTags = lcf::makeEnumTags<PanState>(
 			"fixed",
 			"follow"
 		);

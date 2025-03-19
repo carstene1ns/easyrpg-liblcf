@@ -71,7 +71,7 @@ namespace rpg {
 			increase_transp = 40,
 			decrease_transp = 41
 		};
-		static constexpr auto kCodeTags = lcf::makeEnumTags<Code>(
+		static inline constexpr auto kCodeTags = lcf::makeEnumTags<Code>(
 			"move_up",
 			"move_right",
 			"move_down",

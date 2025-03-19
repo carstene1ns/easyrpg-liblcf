@@ -36,7 +36,7 @@ namespace rpg {
 			MusicType_event = 1,
 			MusicType_specific = 2
 		};
-		static constexpr auto kMusicTypeTags = lcf::makeEnumTags<MusicType>(
+		static inline constexpr auto kMusicTypeTags = lcf::makeEnumTags<MusicType>(
 			"parent",
 			"event",
 			"specific"
@@ -46,7 +46,7 @@ namespace rpg {
 			BGMType_terrain = 1,
 			BGMType_specific = 2
 		};
-		static constexpr auto kBGMTypeTags = lcf::makeEnumTags<BGMType>(
+		static inline constexpr auto kBGMTypeTags = lcf::makeEnumTags<BGMType>(
 			"parent",
 			"terrain",
 			"specific"
@@ -56,7 +56,7 @@ namespace rpg {
 			TriState_allow = 1,
 			TriState_forbid = 2
 		};
-		static constexpr auto kTriStateTags = lcf::makeEnumTags<TriState>(
+		static inline constexpr auto kTriStateTags = lcf::makeEnumTags<TriState>(
 			"parent",
 			"allow",
 			"forbid"

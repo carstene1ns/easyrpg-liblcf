@@ -31,7 +31,7 @@ namespace rpg {
 			Speed_medium = 1,
 			Speed_slow = 2
 		};
-		static constexpr auto kSpeedTags = lcf::makeEnumTags<Speed>(
+		static inline constexpr auto kSpeedTags = lcf::makeEnumTags<Speed>(
 			"fast",
 			"medium",
 			"slow"
@@ -40,7 +40,7 @@ namespace rpg {
 			AnimType_weapon = 0,
 			AnimType_battle = 1
 		};
-		static constexpr auto kAnimTypeTags = lcf::makeEnumTags<AnimType>(
+		static inline constexpr auto kAnimTypeTags = lcf::makeEnumTags<AnimType>(
 			"weapon",
 			"battle"
 		);
@@ -50,7 +50,7 @@ namespace rpg {
 			Movement_jump = 2,
 			Movement_move = 3
 		};
-		static constexpr auto kMovementTags = lcf::makeEnumTags<Movement>(
+		static inline constexpr auto kMovementTags = lcf::makeEnumTags<Movement>(
 			"none",
 			"step",
 			"jump",
@@ -60,7 +60,7 @@ namespace rpg {
 			Afterimage_none = 0,
 			Afterimage_add = 1
 		};
-		static constexpr auto kAfterimageTags = lcf::makeEnumTags<Afterimage>(
+		static inline constexpr auto kAfterimageTags = lcf::makeEnumTags<Afterimage>(
 			"none",
 			"add"
 		);

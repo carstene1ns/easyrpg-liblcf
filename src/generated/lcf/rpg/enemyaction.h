@@ -31,7 +31,7 @@ namespace rpg {
 			Kind_skill = 1,
 			Kind_transformation = 2
 		};
-		static constexpr auto kKindTags = lcf::makeEnumTags<Kind>(
+		static inline constexpr auto kKindTags = lcf::makeEnumTags<Kind>(
 			"basic",
 			"skill",
 			"transformation"
@@ -46,7 +46,7 @@ namespace rpg {
 			Basic_escape = 6,
 			Basic_nothing = 7
 		};
-		static constexpr auto kBasicTags = lcf::makeEnumTags<Basic>(
+		static inline constexpr auto kBasicTags = lcf::makeEnumTags<Basic>(
 			"attack",
 			"dual_attack",
 			"defense",
@@ -66,7 +66,7 @@ namespace rpg {
 			ConditionType_party_lvl = 6,
 			ConditionType_party_fatigue = 7
 		};
-		static constexpr auto kConditionTypeTags = lcf::makeEnumTags<ConditionType>(
+		static inline constexpr auto kConditionTypeTags = lcf::makeEnumTags<ConditionType>(
 			"always",
 			"switch",
 			"turn",

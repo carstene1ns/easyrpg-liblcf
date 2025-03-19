@@ -36,7 +36,7 @@ namespace rpg {
 	{%- if struct_name in constants %}
 	{%- for name, type, value, comment in constants[struct_name] %}
 		// {{ comment }}
-		static constexpr {{ type }} {{ name }} = {{ value }};
+		static inline constexpr {{ type }} {{ name }} = {{ value }};
 	{%- endfor %}
 	{% endif %}
 	{%- if struct_name in enums %}
@@ -51,13 +51,13 @@ namespace rpg {
 		{%- endfor %}
 		};
 		{%- if enum is monotonic_from_0 %}
-		static constexpr auto k{{ name }}Tags = lcf::makeEnumTags<{{name}}>(
+		static inline constexpr auto k{{ name }}Tags = lcf::makeEnumTags<{{name}}>(
 		{%- for field in enum %}
 			"{{ field.0 }}"{%- if not loop.last %},{% endif %}
 		{%- endfor %}
 		);
 		{%- else %}
-		static constexpr auto k{{ name }}Tags = lcf::EnumTags{
+		static inline constexpr auto k{{ name }}Tags = lcf::EnumTags{
 		{%- for field in enum %}
 			{%- if name is not scoped_enum %}
 			{{ name }}_{{ field.0 }}, "{{ field.0 }}"{%- if not loop.last %},{% endif %}

@@ -55,7 +55,7 @@ namespace rpg {
 			FadeOut_instantaneous = 20,
 			FadeOut_none = 21
 		};
-		static constexpr auto kFadeOutTags = lcf::makeEnumTags<FadeOut>(
+		static inline constexpr auto kFadeOutTags = lcf::makeEnumTags<FadeOut>(
 			"default",
 			"fade_out",
 			"remove_blocks",
@@ -103,7 +103,7 @@ namespace rpg {
 			FadeIn_instantaneous = 20,
 			FadeIn_none = 21
 		};
-		static constexpr auto kFadeInTags = lcf::makeEnumTags<FadeIn>(
+		static inline constexpr auto kFadeInTags = lcf::makeEnumTags<FadeIn>(
 			"default",
 			"fade_in",
 			"reconstitute_blocks",
@@ -132,7 +132,7 @@ namespace rpg {
 			Stretch_tiled = 1,
 			Stretch_easyrpg_none = 2
 		};
-		static constexpr auto kStretchTags = lcf::makeEnumTags<Stretch>(
+		static inline constexpr auto kStretchTags = lcf::makeEnumTags<Stretch>(
 			"stretch",
 			"tiled",
 			"easyrpg_none"
@@ -141,7 +141,7 @@ namespace rpg {
 			Font_gothic = 0,
 			Font_mincho = 1
 		};
-		static constexpr auto kFontTags = lcf::makeEnumTags<Font>(
+		static inline constexpr auto kFontTags = lcf::makeEnumTags<Font>(
 			"gothic",
 			"mincho"
 		);
@@ -150,7 +150,7 @@ namespace rpg {
 			BattleFormation_loose = 1,
 			BattleFormation_tight = 2
 		};
-		static constexpr auto kBattleFormationTags = lcf::makeEnumTags<BattleFormation>(
+		static inline constexpr auto kBattleFormationTags = lcf::makeEnumTags<BattleFormation>(
 			"terrain",
 			"loose",
 			"tight"
@@ -162,7 +162,7 @@ namespace rpg {
 			BattleCondition_surround = 3,
 			BattleCondition_pincers = 4
 		};
-		static constexpr auto kBattleConditionTags = lcf::makeEnumTags<BattleCondition>(
+		static inline constexpr auto kBattleConditionTags = lcf::makeEnumTags<BattleCondition>(
 			"none",
 			"initiative",
 			"back",
@@ -173,7 +173,7 @@ namespace rpg {
 			EquipmentSetting_actor = 0,
 			EquipmentSetting_class = 1
 		};
-		static constexpr auto kEquipmentSettingTags = lcf::makeEnumTags<EquipmentSetting>(
+		static inline constexpr auto kEquipmentSettingTags = lcf::makeEnumTags<EquipmentSetting>(
 			"actor",
 			"class"
 		);

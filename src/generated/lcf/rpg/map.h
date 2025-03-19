@@ -36,7 +36,7 @@ namespace rpg {
 			ScrollType_horizontal = 2,
 			ScrollType_both = 3
 		};
-		static constexpr auto kScrollTypeTags = lcf::makeEnumTags<ScrollType>(
+		static inline constexpr auto kScrollTypeTags = lcf::makeEnumTags<ScrollType>(
 			"none",
 			"vertical",
 			"horizontal",
@@ -48,7 +48,7 @@ namespace rpg {
 			GeneratorMode_maze_passage = 2,
 			GeneratorMode_open_room = 3
 		};
-		static constexpr auto kGeneratorModeTags = lcf::makeEnumTags<GeneratorMode>(
+		static inline constexpr auto kGeneratorModeTags = lcf::makeEnumTags<GeneratorMode>(
 			"single_passage",
 			"linked_rooms",
 			"maze_passage",
@@ -58,7 +58,7 @@ namespace rpg {
 			GeneratorTiles_one = 0,
 			GeneratorTiles_two = 1
 		};
-		static constexpr auto kGeneratorTilesTags = lcf::makeEnumTags<GeneratorTiles>(
+		static inline constexpr auto kGeneratorTilesTags = lcf::makeEnumTags<GeneratorTiles>(
 			"one",
 			"two"
 		);

@@ -33,7 +33,7 @@ namespace rpg {
 			Scope_target = 0,
 			Scope_screen = 1
 		};
-		static constexpr auto kScopeTags = lcf::makeEnumTags<Scope>(
+		static inline constexpr auto kScopeTags = lcf::makeEnumTags<Scope>(
 			"target",
 			"screen"
 		);
@@ -42,7 +42,7 @@ namespace rpg {
 			Position_middle = 1,
 			Position_down = 2
 		};
-		static constexpr auto kPositionTags = lcf::makeEnumTags<Position>(
+		static inline constexpr auto kPositionTags = lcf::makeEnumTags<Position>(
 			"up",
 			"middle",
 			"down"

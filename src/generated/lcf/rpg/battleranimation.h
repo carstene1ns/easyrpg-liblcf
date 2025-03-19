@@ -34,7 +34,7 @@ namespace rpg {
 			Speed_medium = 14,
 			Speed_fast = 8
 		};
-		static constexpr auto kSpeedTags = lcf::EnumTags{
+		static inline constexpr auto kSpeedTags = lcf::EnumTags{
 			Speed_slow, "slow",
 			Speed_medium, "medium",
 			Speed_fast, "fast"
@@ -53,7 +53,7 @@ namespace rpg {
 			Pose_Victory = 10,
 			Pose_Item = 11
 		};
-		static constexpr auto kPoseTags = lcf::makeEnumTags<Pose>(
+		static inline constexpr auto kPoseTags = lcf::makeEnumTags<Pose>(
 			"Idle",
 			"AttackRight",
 			"AttackLeft",

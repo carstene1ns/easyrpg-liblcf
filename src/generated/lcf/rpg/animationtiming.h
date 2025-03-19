@@ -32,7 +32,7 @@ namespace rpg {
 			FlashScope_target = 1,
 			FlashScope_screen = 2
 		};
-		static constexpr auto kFlashScopeTags = lcf::makeEnumTags<FlashScope>(
+		static inline constexpr auto kFlashScopeTags = lcf::makeEnumTags<FlashScope>(
 			"nothing",
 			"target",
 			"screen"
@@ -42,7 +42,7 @@ namespace rpg {
 			ScreenShake_target = 1,
 			ScreenShake_screen = 2
 		};
-		static constexpr auto kScreenShakeTags = lcf::makeEnumTags<ScreenShake>(
+		static inline constexpr auto kScreenShakeTags = lcf::makeEnumTags<ScreenShake>(
 			"nothing",
 			"target",
 			"screen"

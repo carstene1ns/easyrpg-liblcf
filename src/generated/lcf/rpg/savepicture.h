@@ -34,7 +34,7 @@ namespace rpg {
 			Effect_wave = 2,
 			Effect_maniac_fixed_angle = 3
 		};
-		static constexpr auto kEffectTags = lcf::makeEnumTags<Effect>(
+		static inline constexpr auto kEffectTags = lcf::makeEnumTags<Effect>(
 			"none",
 			"rotation",
 			"wave",
@@ -53,7 +53,7 @@ namespace rpg {
 			MapLayer_windows = 9,
 			MapLayer_timers = 10
 		};
-		static constexpr auto kMapLayerTags = lcf::makeEnumTags<MapLayer>(
+		static inline constexpr auto kMapLayerTags = lcf::makeEnumTags<MapLayer>(
 			"none",
 			"parallax",
 			"tilemap_below",
@@ -74,7 +74,7 @@ namespace rpg {
 			BattleLayer_windows_and_status = 4,
 			BattleLayer_timers = 5
 		};
-		static constexpr auto kBattleLayerTags = lcf::makeEnumTags<BattleLayer>(
+		static inline constexpr auto kBattleLayerTags = lcf::makeEnumTags<BattleLayer>(
 			"none",
 			"background",
 			"battlers_and_animations",
@@ -88,7 +88,7 @@ namespace rpg {
 			EasyRpgFlip_y = 2,
 			EasyRpgFlip_both = 3
 		};
-		static constexpr auto kEasyRpgFlipTags = lcf::makeEnumTags<EasyRpgFlip>(
+		static inline constexpr auto kEasyRpgFlipTags = lcf::makeEnumTags<EasyRpgFlip>(
 			"none",
 			"x",
 			"y",
@@ -98,7 +98,7 @@ namespace rpg {
 			EasyRpgType_default = 0,
 			EasyRpgType_window = 1
 		};
-		static constexpr auto kEasyRpgTypeTags = lcf::makeEnumTags<EasyRpgType>(
+		static inline constexpr auto kEasyRpgTypeTags = lcf::makeEnumTags<EasyRpgType>(
 			"default",
 			"window"
 		);

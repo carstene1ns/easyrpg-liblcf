@@ -37,7 +37,7 @@ namespace rpg {
 			Direction_down = 2,
 			Direction_left = 3
 		};
-		static constexpr auto kDirectionTags = lcf::makeEnumTags<Direction>(
+		static inline constexpr auto kDirectionTags = lcf::makeEnumTags<Direction>(
 			"up",
 			"right",
 			"down",
@@ -49,7 +49,7 @@ namespace rpg {
 			Frame_right = 2,
 			Frame_middle2 = 3
 		};
-		static constexpr auto kFrameTags = lcf::makeEnumTags<Frame>(
+		static inline constexpr auto kFrameTags = lcf::makeEnumTags<Frame>(
 			"left",
 			"middle",
 			"right",
@@ -64,7 +64,7 @@ namespace rpg {
 			MoveType_away = 5,
 			MoveType_custom = 6
 		};
-		static constexpr auto kMoveTypeTags = lcf::makeEnumTags<MoveType>(
+		static inline constexpr auto kMoveTypeTags = lcf::makeEnumTags<MoveType>(
 			"stationary",
 			"random",
 			"vertical",
@@ -80,7 +80,7 @@ namespace rpg {
 			Trigger_auto_start = 3,
 			Trigger_parallel = 4
 		};
-		static constexpr auto kTriggerTags = lcf::makeEnumTags<Trigger>(
+		static inline constexpr auto kTriggerTags = lcf::makeEnumTags<Trigger>(
 			"action",
 			"touched",
 			"collision",
@@ -92,7 +92,7 @@ namespace rpg {
 			Layers_same = 1,
 			Layers_above = 2
 		};
-		static constexpr auto kLayersTags = lcf::makeEnumTags<Layers>(
+		static inline constexpr auto kLayersTags = lcf::makeEnumTags<Layers>(
 			"below",
 			"same",
 			"above"
@@ -106,7 +106,7 @@ namespace rpg {
 			AnimType_spin = 5,
 			AnimType_step_frame_fix = 6
 		};
-		static constexpr auto kAnimTypeTags = lcf::makeEnumTags<AnimType>(
+		static inline constexpr auto kAnimTypeTags = lcf::makeEnumTags<AnimType>(
 			"non_continuous",
 			"continuous",
 			"fixed_non_continuous",
@@ -123,7 +123,7 @@ namespace rpg {
 			MoveSpeed_double = 5,
 			MoveSpeed_fourfold = 6
 		};
-		static constexpr auto kMoveSpeedTags = lcf::EnumTags{
+		static inline constexpr auto kMoveSpeedTags = lcf::EnumTags{
 			MoveSpeed_eighth, "eighth",
 			MoveSpeed_quarter, "quarter",
 			MoveSpeed_half, "half",
@@ -144,7 +144,7 @@ namespace rpg {
 			ManiacEventInfo_common_event = 32,
 			ManiacEventInfo_battle_event = 64
 		};
-		static constexpr auto kManiacEventInfoTags = lcf::EnumTags{
+		static inline constexpr auto kManiacEventInfoTags = lcf::EnumTags{
 			ManiacEventInfo_action, "action",
 			ManiacEventInfo_touched, "touched",
 			ManiacEventInfo_collision, "collision",

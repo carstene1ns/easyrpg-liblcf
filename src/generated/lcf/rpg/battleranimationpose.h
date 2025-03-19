@@ -31,7 +31,7 @@ namespace rpg {
 			AnimType_character = 0,
 			AnimType_battle = 1
 		};
-		static constexpr auto kAnimTypeTags = lcf::makeEnumTags<AnimType>(
+		static inline constexpr auto kAnimTypeTags = lcf::makeEnumTags<AnimType>(
 			"character",
 			"battle"
 		);

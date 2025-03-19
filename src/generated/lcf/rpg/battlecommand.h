@@ -35,7 +35,7 @@ namespace rpg {
 			Type_escape = 5,
 			Type_special = 6
 		};
-		static constexpr auto kTypeTags = lcf::makeEnumTags<Type>(
+		static inline constexpr auto kTypeTags = lcf::makeEnumTags<Type>(
 			"attack",
 			"skill",
 			"subskill",

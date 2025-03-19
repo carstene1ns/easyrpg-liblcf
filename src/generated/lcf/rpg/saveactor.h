@@ -29,13 +29,13 @@ namespace rpg {
 	class SaveActor {
 	public:
 		// Sentinel name used to denote that the default LDB name should be used.
-		static constexpr const char* kEmptyName = "\x1";
+		static inline constexpr const char* kEmptyName = "\x1";
 
 		enum RowType {
 			RowType_front = 0,
 			RowType_back = 1
 		};
-		static constexpr auto kRowTypeTags = lcf::makeEnumTags<RowType>(
+		static inline constexpr auto kRowTypeTags = lcf::makeEnumTags<RowType>(
 			"front",
 			"back"
 		);

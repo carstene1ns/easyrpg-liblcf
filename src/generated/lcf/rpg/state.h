@@ -29,13 +29,13 @@ namespace rpg {
 	class State {
 	public:
 		// The ID of the special death state
-		static constexpr int kDeathID = 1;
+		static inline constexpr int kDeathID = 1;
 
 		enum Persistence {
 			Persistence_ends = 0,
 			Persistence_persists = 1
 		};
-		static constexpr auto kPersistenceTags = lcf::makeEnumTags<Persistence>(
+		static inline constexpr auto kPersistenceTags = lcf::makeEnumTags<Persistence>(
 			"ends",
 			"persists"
 		);
@@ -45,7 +45,7 @@ namespace rpg {
 			Restriction_attack_enemy = 2,
 			Restriction_attack_ally = 3
 		};
-		static constexpr auto kRestrictionTags = lcf::makeEnumTags<Restriction>(
+		static inline constexpr auto kRestrictionTags = lcf::makeEnumTags<Restriction>(
 			"normal",
 			"do_nothing",
 			"attack_enemy",
@@ -56,7 +56,7 @@ namespace rpg {
 			AffectType_double = 1,
 			AffectType_nothing = 2
 		};
-		static constexpr auto kAffectTypeTags = lcf::makeEnumTags<AffectType>(
+		static inline constexpr auto kAffectTypeTags = lcf::makeEnumTags<AffectType>(
 			"half",
 			"double",
 			"nothing"
@@ -66,7 +66,7 @@ namespace rpg {
 			ChangeType_gain = 1,
 			ChangeType_nothing = 2
 		};
-		static constexpr auto kChangeTypeTags = lcf::makeEnumTags<ChangeType>(
+		static inline constexpr auto kChangeTypeTags = lcf::makeEnumTags<ChangeType>(
 			"lose",
 			"gain",
 			"nothing"

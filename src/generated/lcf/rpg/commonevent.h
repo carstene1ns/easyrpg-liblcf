@@ -34,7 +34,7 @@ namespace rpg {
 			Trigger_parallel = 4,
 			Trigger_call = 5
 		};
-		static constexpr auto kTriggerTags = lcf::EnumTags{
+		static inline constexpr auto kTriggerTags = lcf::EnumTags{
 			Trigger_automatic, "automatic",
 			Trigger_parallel, "parallel",
 			Trigger_call, "call"

@@ -194,7 +194,7 @@ namespace rpg {
 			Maniac_EditTile = 3028,
 			Maniac_ControlTextProcessing = 3029
 		};
-		static constexpr auto kCodeTags = lcf::EnumTags{
+		static inline constexpr auto kCodeTags = lcf::EnumTags{
 			Code::END, "END",
 			Code::CallCommonEvent, "CallCommonEvent",
 			Code::ForceFlee, "ForceFlee",

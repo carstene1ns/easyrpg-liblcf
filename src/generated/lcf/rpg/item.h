@@ -31,7 +31,7 @@ namespace rpg {
 	class Item {
 	public:
 		// Sentinel name used to denote that the default item start message should be used.
-		static constexpr const char* kDefaultMessage = "default_message";
+		static inline constexpr const char* kDefaultMessage = "default_message";
 
 		enum Type {
 			Type_normal = 0,
@@ -46,7 +46,7 @@ namespace rpg {
 			Type_special = 9,
 			Type_switch = 10
 		};
-		static constexpr auto kTypeTags = lcf::makeEnumTags<Type>(
+		static inline constexpr auto kTypeTags = lcf::makeEnumTags<Type>(
 			"normal",
 			"weapon",
 			"shield",
@@ -63,7 +63,7 @@ namespace rpg {
 			Trajectory_straight = 0,
 			Trajectory_return = 1
 		};
-		static constexpr auto kTrajectoryTags = lcf::makeEnumTags<Trajectory>(
+		static inline constexpr auto kTrajectoryTags = lcf::makeEnumTags<Trajectory>(
 			"straight",
 			"return"
 		);
@@ -73,7 +73,7 @@ namespace rpg {
 			Target_simultaneous = 2,
 			Target_sequential = 3
 		};
-		static constexpr auto kTargetTags = lcf::makeEnumTags<Target>(
+		static inline constexpr auto kTargetTags = lcf::makeEnumTags<Target>(
 			"single",
 			"center",
 			"simultaneous",

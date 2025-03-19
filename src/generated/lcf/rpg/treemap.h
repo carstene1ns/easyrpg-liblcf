@@ -34,7 +34,7 @@ namespace rpg {
 			MapType_map = 1,
 			MapType_area = 2
 		};
-		static constexpr auto kMapTypeTags = lcf::makeEnumTags<MapType>(
+		static inline constexpr auto kMapTypeTags = lcf::makeEnumTags<MapType>(
 			"root",
 			"map",
 			"area"
